@@ -6,94 +6,142 @@ body {
     align-items: center;
     background-color: #fce4ec;
     font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-    overflow: hidden; /* Ngăn thanh cuộn khi có pháo giấy */
+    overflow: hidden;
 }
 
 .container {
     text-align: center;
-    position: relative;
-    z-index: 2; /* Đảm bảo nội dung nằm trên pháo giấy */
+    width: 100%;
+}
+
+/* Cố định chiều cao vùng chữ để không đẩy nến khi thay đổi */
+.message-wrapper {
+    height: 100px; 
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+/* Cố định chiều cao vùng nút bấm */
+.action-wrapper {
+    height: 80px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-top: 10px;
 }
 
 #status {
     color: #ad1457;
-    margin-bottom: 30px;
-    transition: opacity 0.5s ease;
+    margin: 0;
 }
 
-/* --- CSS MỚI CHO PHẦN CHỒNG ẢNH --- */
 .cake-container {
     position: relative;
-    width: 250px;  /* Định nghĩa chiều rộng cố định cho khung chứa */
-    height: 350px; /* Định nghĩa chiều cao cố định (bạn tự điều chỉnh cho vừa ảnh) */
-    margin: 0 auto; /* Căn giữa */
+    width: 250px;
+    height: 350px;
+    margin: 0 auto;
 }
 
 .candle-layer {
-    position: absolute; /* Chìa khóa để xếp chồng lên nhau */
+    position: absolute;
     top: 0;
     left: 0;
-    width: 100%; /* Ảnh sẽ co giãn theo khung chứa .cake-container */
-    height: auto;
-    transition: opacity 0.8s ease-in-out; /* Hiệu ứng mờ dần mượt mà */
+    width: 100%;
+    height: 100%;
+    display: block;
+    object-fit: contain;
+    transition: opacity 0.8s ease-in-out;
 }
 
-/* Lớp nến cháy mặc định hiển thị */
-.layer-on {
-    opacity: 1;
-    z-index: 2;
-}
+.layer-on { opacity: 1; z-index: 2; }
+.layer-off { opacity: 0; z-index: 1; }
 
-/* Lớp nến tắt mặc định bị ẩn */
-.layer-off {
-    opacity: 0;
-    z-index: 1;
-}
+.cake-container.blown .layer-on { opacity: 0; }
+.cake-container.blown .layer-off { opacity: 1; }
 
-/* KHI ĐƯỢC THỔI (class 'blown' được thêm vào cha) */
-/* Ẩn nến cháy */
-.cake-container.blown .layer-on {
-    opacity: 0;
-}
-/* Hiện nến tắt */
-.cake-container.blown .layer-off {
-    opacity: 1;
-}
-/* ---------------------------------- */
+.hidden { display: none; }
 
-
-.hidden {
-    display: none;
-}
-
-/* Hiệu ứng hiện chữ Happy Birthday */
-.happy-birthday-show {
-    display: block !important;
+.happy-birthday {
     font-size: 3rem;
     color: #ff4081;
-    margin-top: 20px;
+    margin: 0;
     animation: popUp 0.8s cubic-bezier(0.68, -0.55, 0.27, 1.55) forwards;
 }
 
 @keyframes popUp {
     0% { transform: scale(0); opacity: 0; }
-    80% { transform: scale(1.1); opacity: 1; }
     100% { transform: scale(1); opacity: 1; }
 }
 
 button {
-    margin-top: 20px;
     padding: 10px 20px;
     border: none;
     border-radius: 20px;
     background-color: #ff4081;
     color: white;
-    font-size: 1rem;
     cursor: pointer;
     box-shadow: 0 4px 6px rgba(0,0,0,0.1);
-    transition: transform 0.2s;
 }
-button:hover {
-    transform: translateY(-2px);
-    background-color: #f50057;
+
+/* --- CSS CŨ GIỮ NGUYÊN --- */
+/* ... (các phần body, container, cake-container...) ... */
+
+/* Cập nhật một chút cho chữ Happy Birthday để nó nổi bật trên nền đen */
+.happy-birthday {
+    font-size: 3rem;
+    color: #ff4081;
+    margin: 0;
+    /* Thêm bóng sáng cho chữ để dễ đọc trên nền tối */
+    text-shadow: 0 0 15px rgba(255, 64, 129, 0.8);
+    animation: popUp 0.8s cubic-bezier(0.68, -0.55, 0.27, 1.55) forwards;
+}
+
+
+/* --- CSS MỚI CHO HIỆU ỨNG TẮT ĐÈN --- */
+
+/* Lớp nội dung cần hiện rõ trên nền đen */
+.top-layer {
+    position: relative;
+    z-index: 20; 
+}
+
+/* Khung chứa hiệu ứng tắt đèn */
+.lights-out-layer {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    pointer-events: none;
+    z-index: 10;
+    overflow: hidden;
+}
+
+.lights-out-layer::after {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 2px;
+    height: 2px;
+    border-radius: 50%;
+    /* Bóng đen khổng lồ bao quanh lỗ hổng */
+    box-shadow: 0 0 0 300vmax #000;
+    
+    /* BAN ĐẦU: Phóng cực đại để lỗ hổng chiếm hết màn hình (Vẫn sáng) */
+    transform: translate(-50%, -50%) scale(150);
+    transition: transform 1.5s ease-in-out;
+}
+
+/* KHI THỔI: Thu nhỏ lỗ hổng về 0 (Bóng đen ập vào từ ngoài vào trong) */
+.lights-out-layer.darken::after {
+    transform: translate(-50%, -50%) scale(0);
+}
+
+/* Giữ chữ sáng và rõ trên nền đen */
+.happy-birthday {
+    font-size: 3rem;
+    color: #ff4081;
+    text-shadow: 0 0 20px rgba(255, 64, 129, 0.9);
 }

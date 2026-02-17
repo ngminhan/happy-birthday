@@ -10,18 +10,26 @@
 <body>
 
     <div class="container">
-        <h1 id="status">Hít một hơi thật sâu và THỔI nào!</h1>
+        <div class="message-wrapper top-layer">
+            <h1 id="status">Hít một hơi thật sâu và THỔI nào!</h1>
+            <div id="result" class="hidden">
+                <h2 class="happy-birthday">HAPPY BIRTHDAY! 🎉</h2>
+            </div>
+        </div>
         
         <div id="cake-container" class="cake-container">
             <img class="candle-layer layer-off" src="assets/images/candle-off.png" alt="Nến tắt">
             <img class="candle-layer layer-on" src="assets/images/candle-on.png" alt="Nến đang cháy">
         </div>
 
-        <div id="result" class="hidden">
-            <h2 class="happy-birthday">HAPPY BIRTHDAY! 🎉</h2>
-            <button onclick="location.reload()">Thổi lại lần nữa</button>
+        <div class="action-wrapper top-layer">
+            <div id="action-content" class="hidden">
+                <button onclick="location.reload()">Thổi lại lần nữa</button>
+            </div>
         </div>
     </div>
+
+    <div id="lights-out-layer" class="lights-out-layer"></div>
 
     <script src="js/script.js"></script>
 </body>
