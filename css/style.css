@@ -4,40 +4,81 @@ body {
     display: flex;
     justify-content: center;
     align-items: center;
-    background-color: #fce4ec; /* Màu hồng nhạt */
+    background-color: #fce4ec;
     font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    overflow: hidden; /* Ngăn thanh cuộn khi có pháo giấy */
 }
 
 .container {
     text-align: center;
+    position: relative;
+    z-index: 2; /* Đảm bảo nội dung nằm trên pháo giấy */
 }
 
 #status {
     color: #ad1457;
     margin-bottom: 30px;
+    transition: opacity 0.5s ease;
 }
 
-.cake-area img {
-    width: 250px;
-    height: auto;
-    cursor: pointer;
-    transition: all 0.5s ease;
+/* --- CSS MỚI CHO PHẦN CHỒNG ẢNH --- */
+.cake-container {
+    position: relative;
+    width: 250px;  /* Định nghĩa chiều rộng cố định cho khung chứa */
+    height: 350px; /* Định nghĩa chiều cao cố định (bạn tự điều chỉnh cho vừa ảnh) */
+    margin: 0 auto; /* Căn giữa */
 }
+
+.candle-layer {
+    position: absolute; /* Chìa khóa để xếp chồng lên nhau */
+    top: 0;
+    left: 0;
+    width: 100%; /* Ảnh sẽ co giãn theo khung chứa .cake-container */
+    height: auto;
+    transition: opacity 0.8s ease-in-out; /* Hiệu ứng mờ dần mượt mà */
+}
+
+/* Lớp nến cháy mặc định hiển thị */
+.layer-on {
+    opacity: 1;
+    z-index: 2;
+}
+
+/* Lớp nến tắt mặc định bị ẩn */
+.layer-off {
+    opacity: 0;
+    z-index: 1;
+}
+
+/* KHI ĐƯỢC THỔI (class 'blown' được thêm vào cha) */
+/* Ẩn nến cháy */
+.cake-container.blown .layer-on {
+    opacity: 0;
+}
+/* Hiện nến tắt */
+.cake-container.blown .layer-off {
+    opacity: 1;
+}
+/* ---------------------------------- */
+
 
 .hidden {
     display: none;
 }
 
-.happy-birthday {
+/* Hiệu ứng hiện chữ Happy Birthday */
+.happy-birthday-show {
+    display: block !important;
     font-size: 3rem;
     color: #ff4081;
     margin-top: 20px;
-    animation: zoomIn 0.8s bold;
+    animation: popUp 0.8s cubic-bezier(0.68, -0.55, 0.27, 1.55) forwards;
 }
 
-@keyframes zoomIn {
-    from { transform: scale(0); }
-    to { transform: scale(1); }
+@keyframes popUp {
+    0% { transform: scale(0); opacity: 0; }
+    80% { transform: scale(1.1); opacity: 1; }
+    100% { transform: scale(1); opacity: 1; }
 }
 
 button {
@@ -47,5 +88,12 @@ button {
     border-radius: 20px;
     background-color: #ff4081;
     color: white;
+    font-size: 1rem;
     cursor: pointer;
+    box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+    transition: transform 0.2s;
+}
+button:hover {
+    transform: translateY(-2px);
+    background-color: #f50057;
 }

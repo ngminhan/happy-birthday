@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Chúc Mừng Sinh Nhật</title>
-    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="css/style.css">
     <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
 </head>
 <body>
@@ -12,8 +12,9 @@
     <div class="container">
         <h1 id="status">Hít một hơi thật sâu và THỔI nào!</h1>
         
-        <div class="cake-area">
-            <img id="candle-img" src="candle-on.png" alt="Nến sinh nhật">
+        <div id="cake-container" class="cake-container">
+            <img class="candle-layer layer-off" src="assets/images/candle-off.png" alt="Nến tắt">
+            <img class="candle-layer layer-on" src="assets/images/candle-on.png" alt="Nến đang cháy">
         </div>
 
         <div id="result" class="hidden">
@@ -22,6 +23,6 @@
         </div>
     </div>
 
-    <script src="script.js"></script>
+    <script src="js/script.js"></script>
 </body>
 </html>

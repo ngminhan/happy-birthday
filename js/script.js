@@ -1,18 +1,19 @@
-const candleImg = document.getElementById('candle-img');
+// Thay đổi: Lấy container chứa nến thay vì thẻ img đơn lẻ
+const cakeContainer = document.getElementById('cake-container');
 const statusText = document.getElementById('status');
 const resultDiv = document.getElementById('result');
 
 let isBlown = false;
+let blowSustainedFrames = 0; 
 
-// Yêu cầu truy cập Microphone
 navigator.mediaDevices.getUserMedia({ audio: true })
     .then(stream => {
         const audioContext = new (window.AudioContext || window.webkitAudioContext)();
         const analyser = audioContext.createAnalyser();
         const microphone = audioContext.createMediaStreamSource(stream);
         
-        analyser.fftSize = 256; // Kích thước dữ liệu mẫu
-        const bufferLength = analyser.frequencyBinCount;
+        analyser.fftSize = 256; 
+        const bufferLength = analyser.frequencyBinCount; 
         const dataArray = new Uint8Array(bufferLength);
         
         microphone.connect(analyser);
@@ -22,16 +23,28 @@ navigator.mediaDevices.getUserMedia({ audio: true })
 
             analyser.getByteFrequencyData(dataArray);
             
-            // Tính âm lượng trung bình
-            let sum = 0;
-            for (let i = 0; i < bufferLength; i++) {
-                sum += dataArray[i];
-            }
-            let averageVolume = sum / bufferLength;
+            let lowFreqSum = 0;
+            let highFreqSum = 0;
+            const midPoint = Math.floor(bufferLength / 2);
 
-            // Ngưỡng âm lượng (thường thổi vào mic sẽ > 40-60)
-            if (averageVolume > 50) {
-                extinguishCandle();
+            for (let i = 0; i < midPoint; i++) {
+                lowFreqSum += dataArray[i];
+            }
+            for (let i = midPoint; i < bufferLength; i++) {
+                highFreqSum += dataArray[i];
+            }
+
+            let lowFreqAvg = lowFreqSum / midPoint;
+            let highFreqAvg = highFreqSum / (bufferLength - midPoint);
+
+            // Logic nhận diện tiếng thổi bạn đã cung cấp
+            if (lowFreqAvg > 100 && lowFreqAvg > highFreqAvg * 2) {
+                blowSustainedFrames++; 
+                if (blowSustainedFrames > 10) {
+                    extinguishCandle();
+                }
+            } else {
+                blowSustainedFrames = 0;
             }
 
             requestAnimationFrame(detectBlow);
@@ -47,14 +60,12 @@ navigator.mediaDevices.getUserMedia({ audio: true })
 function extinguishCandle() {
     isBlown = true;
     
-    // Thay đổi ảnh nến
-    candleImg.src = 'candle-off.jpeg'; 
+    // Thêm class 'blown' để kích hoạt hiệu ứng mờ nến cháy/hiện nến tắt trong CSS
+    cakeContainer.classList.add('blown'); 
     
-    // Ẩn tiêu đề cũ, hiện lời chúc
     statusText.classList.add('hidden');
     resultDiv.classList.remove('hidden');
 
-    // Bắn pháo hoa giấy (confetti)
     confetti({
         particleCount: 150,
         spread: 70,
