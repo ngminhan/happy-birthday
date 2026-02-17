@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Chúc Mừng Sinh Nhật</title>
+    <title>hép pi hép pi</title>
     <link rel="stylesheet" href="css/style.css">
     <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
 </head>
@@ -11,10 +11,7 @@
 
     <div class="container">
         <div class="message-wrapper top-layer">
-            <h1 id="status">Hít một hơi thật sâu và THỔI nào!</h1>
-            <div id="result" class="hidden">
-                <h2 class="happy-birthday">HAPPY BIRTHDAY! 🎉</h2>
-            </div>
+            <h1 id="status">Ước 1 điều ước rùi thổi nến nka :> (thổi riel)</h1>
         </div>
         
         <div id="cake-container" class="cake-container">
@@ -22,14 +19,21 @@
             <img class="candle-layer layer-on" src="assets/images/candle-on.png" alt="Nến đang cháy">
         </div>
 
-        <div class="action-wrapper top-layer">
-            <div id="action-content" class="hidden">
-                <button onclick="location.reload()">Thổi lại lần nữa</button>
-            </div>
+        <div id="final-screen" class="hidden top-layer">
+            <h3 class="congratulations">Điều ước của e iu sẽ thành hiện thực :3</h3>
+            <h2 class="happy-birthday">HÉP PI BỚT ĐÂY!!!</h2>
+            
+            <img src="assets/images/gif1.gif" class="gif-decoration gif-left">
+            <img src="assets/images/gif2.gif" class="gif-decoration gif-right">
+            
+            <button onclick="location.reload()">Lần nữa khom</button>
         </div>
     </div>
 
     <div id="lights-out-layer" class="lights-out-layer"></div>
+    <audio id="audio-birthday" src="assets/audio/happy-birthday.mp3" preload="auto" loop></audio>
+
+    <div id="flash-layer"></div>
 
     <script src="js/script.js"></script>
 </body>

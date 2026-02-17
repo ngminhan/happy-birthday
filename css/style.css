@@ -1,10 +1,12 @@
+/* Trong file css/style.css */
+
 body {
     margin: 0;
     height: 100vh;
     display: flex;
     justify-content: center;
     align-items: center;
-    background-color: #fce4ec;
+    background-color: #fce4ec; /* Giữ nguyên màu hồng ban đầu */
     font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
     overflow: hidden;
 }
@@ -14,134 +16,176 @@ body {
     width: 100%;
 }
 
-/* Cố định chiều cao vùng chữ để không đẩy nến khi thay đổi */
-.message-wrapper {
-    height: 100px; 
-    display: flex;
-    align-items: center;
-    justify-content: center;
-}
-
-/* Cố định chiều cao vùng nút bấm */
-.action-wrapper {
-    height: 80px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    margin-top: 10px;
-}
-
 #status {
     color: #ad1457;
-    margin: 0;
+    margin-bottom: 30px;
+    transition: opacity 0.5s ease;
 }
 
+/* Vùng chứa nến */
 .cake-container {
     position: relative;
     width: 250px;
     height: 350px;
     margin: 0 auto;
+    z-index: 5;
 }
 
 .candle-layer {
     position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    display: block;
+    top: 0; left: 0;
+    width: 100%; height: 100%;
     object-fit: contain;
-    transition: opacity 0.8s ease-in-out;
 }
 
 .layer-on { opacity: 1; z-index: 2; }
 .layer-off { opacity: 0; z-index: 1; }
+.cake-container.blown .layer-on { opacity: 0; transition: opacity 0.5s; }
+.cake-container.blown .layer-off { opacity: 1; transition: opacity 0.5s; }
 
-.cake-container.blown .layer-on { opacity: 0; }
-.cake-container.blown .layer-off { opacity: 1; }
+/* HIỆU ỨNG TỐI DẦN */
+.lights-out-layer {
+    position: fixed;
+    top: 0; left: 0;
+    width: 100vw; height: 100vh;
+    background-color: black;
+    z-index: 100;
+    pointer-events: none;
+    opacity: 0;
+    transition: opacity 3.5s ease-in-out;
+    display: none;
+}
 
-.hidden { display: none; }
+.lights-out-layer.darken {
+    display: block;
+    opacity: 1;
+}
 
-.happy-birthday {
-    font-size: 3rem;
+/* MÀN HÌNH KẾT QUẢ - FIX CĂN GIỮA */
+#final-screen {
+    position: fixed;
+    top: 0; left: 0;
+    width: 100vw;
+    height: 100vh;
+    display: flex;
+    flex-direction: column;
+    justify-content: center; /* Căn giữa theo chiều dọc */
+    align-items: center;     /* Căn giữa theo chiều ngang */
+    z-index: 110;
+}
+
+.congratulations {
+    font-size: 2rem;
     color: #ff4081;
-    margin: 0;
-    animation: popUp 0.8s cubic-bezier(0.68, -0.55, 0.27, 1.55) forwards;
 }
 
-@keyframes popUp {
-    0% { transform: scale(0); opacity: 0; }
-    100% { transform: scale(1); opacity: 1; }
+/* Hiệu ứng chữ cho HÉP PI BỚT ĐÂY */
+.happy-birthday {
+    font-size: 5rem; /* Tăng kích thước chữ một chút */
+    font-weight: bold;
+    text-align: center;
+    margin-bottom: 40px;
+    -webkit-text-stroke: 2px rgb(74, 74, 74);
+    
+    /* Tạo dải màu gradient 7 màu */
+    background: linear-gradient(
+        to right, 
+        #9ad1e2, #ffffff, #d48397
+    );
+    /* Ép màu nền vào chữ */
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-size: 400% auto;
+    
+    /* Đổ bóng rực rỡ */
+    filter: drop-shadow(0 0 15px rgba(255, 255, 255, 0.3));
+    
+    /* Kết hợp 2 hiệu ứng: Chạy màu và Nhảy nhót */
+    animation: 
+        rainbowText 4s linear infinite, 
+        textBounce 0.8s ease-in-out infinite alternate;
 }
+
+/* Animation chạy dải màu 7 màu */
+@keyframes rainbowText {
+    0% { background-position: 0% center; }
+    100% { background-position: 400% center; }
+}
+
+/* Animation nhảy nhót vui tươi */
+@keyframes textBounce {
+    from {
+        transform: scale(1);
+        filter: brightness(1);
+    }
+    to {
+        transform: scale(1.1); /* Phóng to nhẹ */
+        filter: brightness(1.2) drop-shadow(0 0 25px rgba(255, 64, 129, 0.8));
+    }
+}
+
+/* 2 ẢNH GIF Ở GÓC */
+/* Style chung cho cả 2 GIF */
+.gif-decoration {
+    position: fixed; /* Giữ ảnh cố định tại một vị trí trên màn hình */
+    bottom: 40px;    /* Cách đáy màn hình 40px */
+    width: 350px;     /* Độ rộng ảnh */
+    height: auto;     /* Tự động điều chỉnh chiều cao theo tỉ lệ */
+    z-index: 105;     /* Đảm bảo nằm trên các lớp nền */
+    pointer-events: none; /* Giúp bạn vẫn click được các nút bên dưới ảnh GIF nếu bị đè */
+}
+
+/* Căn lề trái 20px cho GIF bên trái */
+.gif-left { 
+    left: 20px; 
+}
+
+/* Căn lề phải 20px cho GIF bên phải */
+.gif-right { 
+    right: 20px; 
+}
+
+.hidden { display: none !important; }
 
 button {
-    padding: 10px 20px;
+    padding: 15px 40px;
+    border-radius: 30px;
     border: none;
-    border-radius: 20px;
-    background-color: #ff4081;
+    background: #ff4081;
     color: white;
+    font-weight: bold;
     cursor: pointer;
-    box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+    font-size: 1.2rem;
+    box-shadow: 0 4px 15px rgba(255, 64, 129, 0.4);
 }
 
-/* --- CSS CŨ GIỮ NGUYÊN --- */
-/* ... (các phần body, container, cake-container...) ... */
+/* ... các code cũ ... */
 
-/* Cập nhật một chút cho chữ Happy Birthday để nó nổi bật trên nền đen */
-.happy-birthday {
-    font-size: 3rem;
-    color: #ff4081;
-    margin: 0;
-    /* Thêm bóng sáng cho chữ để dễ đọc trên nền tối */
-    text-shadow: 0 0 15px rgba(255, 64, 129, 0.8);
-    animation: popUp 0.8s cubic-bezier(0.68, -0.55, 0.27, 1.55) forwards;
-}
-
-
-/* --- CSS MỚI CHO HIỆU ỨNG TẮT ĐÈN --- */
-
-/* Lớp nội dung cần hiện rõ trên nền đen */
-.top-layer {
-    position: relative;
-    z-index: 20; 
-}
-
-/* Khung chứa hiệu ứng tắt đèn */
-.lights-out-layer {
+/* --- HIỆU ỨNG LOÉ SÁNG (FLASH) MỚI --- */
+#flash-layer {
     position: fixed;
     top: 0;
     left: 0;
     width: 100vw;
     height: 100vh;
-    pointer-events: none;
-    z-index: 10;
-    overflow: hidden;
+    background-color: white; /* Màu flash là trắng */
+    z-index: 200; /* Cao nhất, đè lên tất cả mọi thứ */
+    pointer-events: none; /* Không chặn click */
+    opacity: 0; /* Mặc định là ẩn */
 }
 
-.lights-out-layer::after {
-    content: '';
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    width: 2px;
-    height: 2px;
-    border-radius: 50%;
-    /* Bóng đen khổng lồ bao quanh lỗ hổng */
-    box-shadow: 0 0 0 300vmax #000;
-    
-    /* BAN ĐẦU: Phóng cực đại để lỗ hổng chiếm hết màn hình (Vẫn sáng) */
-    transform: translate(-50%, -50%) scale(150);
-    transition: transform 1.5s ease-in-out;
+/* Class này được thêm vào bằng JS để kích hoạt animation */
+#flash-layer.do-flash {
+    /* Chạy animation tên 'flashAnim', kéo dài 0.8s, kiểu ease-out, giữ trạng thái cuối */
+    animation: flashAnim 0.8s ease-out forwards;
 }
 
-/* KHI THỔI: Thu nhỏ lỗ hổng về 0 (Bóng đen ập vào từ ngoài vào trong) */
-.lights-out-layer.darken::after {
-    transform: translate(-50%, -50%) scale(0);
-}
-
-/* Giữ chữ sáng và rõ trên nền đen */
-.happy-birthday {
-    font-size: 3rem;
-    color: #ff4081;
-    text-shadow: 0 0 20px rgba(255, 64, 129, 0.9);
+/* Định nghĩa animation */
+@keyframes flashAnim {
+    0% {
+        opacity: 1; /* Bắt đầu: Trắng xoá ngay lập tức */
+    }
+    100% {
+        opacity: 0; /* Kết thúc: Trong suốt */
+    }
 }
